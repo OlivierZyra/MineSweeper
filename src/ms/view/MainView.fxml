@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="ms.view.MainViewController">
+   <center>
+      <Button mnemonicParsing="false" text="Button" BorderPane.alignment="CENTER" />
+   </center>
+   <left>
+      <Button mnemonicParsing="false" text="Button" BorderPane.alignment="CENTER" />
+   </left>
+   <top>
+      <Button mnemonicParsing="false" text="Button" BorderPane.alignment="CENTER" />
+   </top>
+   <right>
+      <Button mnemonicParsing="false" text="Button" BorderPane.alignment="CENTER" />
+   </right>
+   <bottom>
+      <Button mnemonicParsing="false" text="Button" BorderPane.alignment="CENTER" />
+   </bottom>
+</BorderPane>
