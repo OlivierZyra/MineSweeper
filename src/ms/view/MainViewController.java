@@ -4,6 +4,8 @@ package ms.view;
 import java.net.URL;
 import java.util.ResourceBundle;
 import enums.EMode;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -15,6 +17,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 /////////////////////////////////////////////////////////////////////////////////////////////////
 public class MainViewController implements Initializable {
 	/////////////////////////////////////////////////////////////////////////////////////////////
@@ -44,17 +47,44 @@ public class MainViewController implements Initializable {
 	private boolean gameOver     = false;
 	private int nbFlag;
 
+	private Timeline timer = null;
+	private int time = 0;
+
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		initGameGrid(EMode.EASY);
 	}
-	/////////////////////////////////////////////////////////////////////////////////////////////
+
+	// INPUTS METHODS ///////////////////////////////////////////////////////////////////////////
+	// INPUT EVENT METHODS //////////////////////////////////////////////////////////////////////
+	public void onNewGameEasyPressed() {
+		initGameGrid(EMode.EASY);
+	}
+
+	public void onNewGameNormPressed() {
+		initGameGrid(EMode.NORMAL);
+	}
+
+	public void onNewGameHardPressed() {
+		initGameGrid(EMode.HARD);
+	}
+
+	public void onNewGamePressed() {
+		initGameGrid(mode);
+	}	
+
+	// GAME LOGIC METHODS ///////////////////////////////////////////////////////////////////////
+	// GAME LOGIC METHODS ///////////////////////////////////////////////////////////////////////
+
 	public void initGameGrid(EMode mode) {
 
 		nbFlag = mode.getNbMine();
 		initialClick = true;
 		gameOver = false;
+
+		// start the timer 
+		timer = initTimer();
 
 		// Assign difficulty mode
 		this.mode = mode;
@@ -93,29 +123,8 @@ public class MainViewController implements Initializable {
 		}
 
 	}
-	/////////////////////////////////////////////////////////////////////////////////////////////
-	public void onNewGameEasyPressed() {
-		initGameGrid(EMode.EASY);
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////
-	public void onNewGameNormPressed() {
-		initGameGrid(EMode.NORMAL);
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////
-	public void onNewGameHardPressed() {
-		initGameGrid(EMode.HARD);
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////
-	public void onNewGamePressed() {
-		initGameGrid(mode);
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////	
-	public void setStageReference(Stage stageReference) {
-		this.stageReference = stageReference;
-	}
 
 
-	// GAME LOGIC METHODS ///////////////////////////////////////////////////////////////////////
 	public void placeMines(int notHereX, int notHereY) {
 
 		int nbMine = mode.getNbMine();
@@ -146,7 +155,8 @@ public class MainViewController implements Initializable {
 		}
 
 	}
-	/////////////////////////////////////////////////////////////////////////////////////////////
+
+
 	public void revealCel(Cel cel) {
 
 		if(!gameOver) {
@@ -168,10 +178,11 @@ public class MainViewController implements Initializable {
 					cel.setDisable(true);
 
 					if(cel.isMine()) {
-						
+
 						gameOver = true;
+						timer.stop();
 						cel.setText("X");
-						
+
 					} else {
 
 						if(cel.getNbMineAround() > 0) {
@@ -195,8 +206,8 @@ public class MainViewController implements Initializable {
 					}
 
 					if(isWin()) {
-						System.out.println("win");
 						gameOver = true;
+						timer.stop();
 					}
 
 				}
@@ -206,33 +217,35 @@ public class MainViewController implements Initializable {
 		}
 
 	}
-	/////////////////////////////////////////////////////////////////////////////////////////////
+
+
 	public void placeFlag(Cel cel) {
-		
+
 		if(!cel.isRevealed()) {
-			
+
 			if(cel.isFlagged()) {
-				
+
 				cel.setText("");
 				cel.setFlagged(false);
 				nbFlag ++;
-				
+
 			} else {
-				
+
 				if(nbFlag > 0) {
-					
+
 					cel.setText("F");
 					cel.setFlagged(true);
 					nbFlag --;
-					
+
 				}
-				
+
 			}
-					
+
 		}
-		
+
 	}
-	/////////////////////////////////////////////////////////////////////////////////////////////
+
+
 	public boolean isWin() {
 
 		boolean isWin = false;
@@ -253,7 +266,42 @@ public class MainViewController implements Initializable {
 		return isWin;
 
 	}
-	/////////////////////////////////////////////////////////////////////////////////////////////
+
+	// TIMER METHODS ///////////////////////////////////////////////////////////////////////////
+	public Timeline initTimer() {
+
+		if(timer != null) {timer.stop();}	
+		time = 0;
+		timerLabel.setText("000");
+
+		Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), ev -> {
+			timerTick();
+	    }));
+		
+	    timeline.setCycleCount(Timeline.INDEFINITE);
+	    timeline.play();
+	  
+		return timeline;
+
+	}
+
+	public void timerTick() {
+		time ++;
+		if(time >= 1000) {
+			gameOver = true;
+			timer.stop();
+		} else {
+			if(time < 10)  {timerLabel.setText("00"+time);} else
+				if(time < 100) {timerLabel.setText("0"+time);}
+		}
+	}
+
+	// MISCELLANEOUS ///////////////////////////////////////////////////////////////////////////
+	public void setStageReference(Stage stageReference) {
+		this.stageReference = stageReference;
+	}
+
+
 
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
