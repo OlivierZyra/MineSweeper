@@ -20,7 +20,7 @@ public class MainViewController implements Initializable {
 	/////////////////////////////////////////////////////////////////////////////////////////////
 
 	private final int CEL_SIZE = 32;
-	
+
 	@FXML private MenuItem newEasyButton;
 	@FXML private MenuItem newNormButton;
 	@FXML private MenuItem newHardButton;
@@ -32,24 +32,33 @@ public class MainViewController implements Initializable {
 
 	@FXML private BorderPane gameGridContainer;
 	@FXML private BorderPane rootNode;
-	
+
 	private GridPane gameGrid;
 	private Stage stageReference = null;
-	
+
 	private EMode mode;
-	
+
+	private Cel[][] cels;
+
+	private boolean initialClick = true;
+	private boolean gameOver     = false;
+	private int nbFlag;
+
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		initGameGrid(EMode.EASY);
 	}
-
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	public void initGameGrid(EMode mode) {
-		
+
+		nbFlag = mode.getNbMine();
+		initialClick = true;
+		gameOver = false;
+
 		// Assign difficulty mode
 		this.mode = mode;
-		
+
 		// Create and the GridPane node 
 		gameGrid = new GridPane();
 		gameGrid.setGridLinesVisible(true);
@@ -64,15 +73,17 @@ public class MainViewController implements Initializable {
 			RowConstraints row = new RowConstraints(CEL_SIZE);
 			gameGrid.getRowConstraints().add(row);
 		}
-		
-		// Fill the GridPane with Cels
-		for(int i = 0; i < mode.getW(); i++) {
-			for(int j = 0; j < mode.getH(); j++) {
-				Button l = new Cel(this, CEL_SIZE, i, j);
-				gameGrid.add(l, i, j);
+
+		// Fill the GridPane and array with Cels
+		cels = new Cel[mode.getW()][mode.getH()];
+		for(int x = 0; x < mode.getW(); x++) {
+			for(int y = 0; y < mode.getH(); y++) {
+				Cel cel = new Cel(this, CEL_SIZE, x, y);
+				gameGrid.add(cel, x, y);
+				cels[x][y] = cel;
 			}
 		}
-		
+
 		// Assign the GridPane to his container in the view
 		gameGridContainer.setCenter(gameGrid);
 
@@ -94,14 +105,155 @@ public class MainViewController implements Initializable {
 	public void onNewGameHardPressed() {
 		initGameGrid(EMode.HARD);
 	}
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	public void onNewGamePressed() {
+		initGameGrid(mode);
+	}
 	/////////////////////////////////////////////////////////////////////////////////////////////	
 	public void setStageReference(Stage stageReference) {
 		this.stageReference = stageReference;
 	}
-	/////////////////////////////////////////////////////////////////////////////////////////////
-	public void revealCel(int x, int y) {
-		System.out.println("Button " + x + " - " + y + " pressed");
+
+
+	// GAME LOGIC METHODS ///////////////////////////////////////////////////////////////////////
+	public void placeMines(int notHereX, int notHereY) {
+
+		int nbMine = mode.getNbMine();
+
+		int xx = 0;
+		int yy = 0;
+
+		for(int i = 0; i < nbMine; i++) {
+
+			do {
+				xx = (int)(Math.random()*mode.getW());
+				yy = (int)(Math.random()*mode.getH());
+			} 
+			while(cels[xx][yy].isMine() || (xx == notHereX && yy == notHereY));
+
+			cels[xx][yy].setMine(true);
+
+			// Increment the nbMineAround attribute to all the cels around the mine	
+			if(xx > 0) {cels[xx-1][yy].incrMineAround();}
+			if(yy > 0) {cels[xx][yy-1].incrMineAround();}
+			if(xx < mode.getW()-1) {cels[xx+1][yy].incrMineAround();}
+			if(yy < mode.getH()-1) {cels[xx][yy+1].incrMineAround();}
+			if(xx > 0 && yy > 0)   {cels[xx-1][yy-1].incrMineAround();}
+			if(xx > 0 && yy < mode.getH()-1 ) {cels[xx-1][yy+1].incrMineAround();}
+			if(xx < mode.getW()-1 && yy > 0)  {cels[xx+1][yy-1].incrMineAround();}
+			if(xx < mode.getW()-1 && yy < mode.getH()-1 ) {cels[xx+1][yy+1].incrMineAround();}
+
+		}
+
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////
+	public void revealCel(Cel cel) {
+
+		if(!gameOver) {
+
+			int xx = cel.getxPos();
+			int yy = cel.getyPos();
+
+			if(initialClick) {
+				placeMines(xx, yy);
+				initialClick = false;
+			}
+
+			if(!cel.isRevealed()) {
+
+				if(!cel.isFlagged()) {
+
+					cel.setRevealed(true);
+
+					cel.setDisable(true);
+
+					if(cel.isMine()) {
+						
+						gameOver = true;
+						cel.setText("X");
+						
+					} else {
+
+						if(cel.getNbMineAround() > 0) {
+
+							cel.setText(""+cel.getNbMineAround());
+							cel.colorize();
+
+						} else {
+
+							if(xx > 0) {revealCel(cels[xx-1][yy]);}
+							if(yy > 0) {revealCel(cels[xx][yy-1]);}
+							if(xx < mode.getW()-1) {revealCel(cels[xx+1][yy]);}
+							if(yy < mode.getH()-1) {revealCel(cels[xx][yy+1]);}
+							if(xx > 0 && yy > 0)   {revealCel(cels[xx-1][yy-1]);}
+							if(xx > 0 && yy < mode.getH()-1 ) {revealCel(cels[xx-1][yy+1]);}
+							if(xx < mode.getW()-1 && yy > 0)  {revealCel(cels[xx+1][yy-1]);}
+							if(xx < mode.getW()-1 && yy < mode.getH()-1 ) {revealCel(cels[xx+1][yy+1]);}
+
+						}
+
+					}
+
+					if(isWin()) {
+						System.out.println("win");
+						gameOver = true;
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	public void placeFlag(Cel cel) {
+		
+		if(!cel.isRevealed()) {
+			
+			if(cel.isFlagged()) {
+				
+				cel.setText("");
+				cel.setFlagged(false);
+				nbFlag ++;
+				
+			} else {
+				
+				if(nbFlag > 0) {
+					
+					cel.setText("F");
+					cel.setFlagged(true);
+					nbFlag --;
+					
+				}
+				
+			}
+					
+		}
+		
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	public boolean isWin() {
+
+		boolean isWin = false;
+		int nbCellRemaining = 0;
+
+		for(int x = 0; x < mode.getW(); x++) {
+			for(int y = 0; y < mode.getH(); y++) {
+				if(!cels[x][y].isRevealed()) {
+					nbCellRemaining ++;
+				}
+			}
+		}
+
+		if(nbCellRemaining == mode.getNbMine()) {
+			isWin = true;
+		}
+
+		return isWin;
+
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////
+
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////

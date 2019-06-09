@@ -37,7 +37,7 @@
          <top>
             <BorderPane maxHeight="48.0" minHeight="48.0" prefHeight="48.0" prefWidth="158.0" style="-fx-border-style: solid outside; -fx-background-color: lightgray;" BorderPane.alignment="CENTER">
                <center>
-                  <Button fx:id="startButton" mnemonicParsing="false" BorderPane.alignment="CENTER">
+                  <Button fx:id="startButton" mnemonicParsing="false" onAction="#onNewGamePressed" BorderPane.alignment="CENTER">
                      <graphic>
                         <ImageView fitHeight="31.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" smooth="false">
                            <image>

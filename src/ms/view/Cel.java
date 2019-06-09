@@ -1,14 +1,20 @@
 package ms.view;
 
+import com.sun.glass.events.MouseEvent;
+
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseButton;
 
 public class Cel extends Button {
 	
 	private int xPos;
 	private int yPos;
 	private int nbMineAround = 0;
+	
 	private boolean isMine     = false;
 	private boolean isRevealed = false;
+	private boolean isFlagged  = false;
+	
 	private MainViewController controller;
 	
 	public Cel(MainViewController controller, int size, int xPos, int yPos) {
@@ -23,9 +29,36 @@ public class Cel extends Button {
 		this.setPrefSize(size, size);
 		this.setText(" ");
 		
-		this.setOnMouseClicked(e -> this.controller.revealCel(this.xPos,this.yPos));	
+		//this.setOnMouseClicked(e -> this.controller.revealCel(this));	
+		this.setOnMouseClicked(e -> {
+			if(e.getButton().equals(MouseButton.PRIMARY)) {
+				this.controller.revealCel(this);
+			} 
+			else 
+			if(e.getButton().equals(MouseButton.SECONDARY)) {
+				this.controller.placeFlag(this);
+			}
+			
+		});
+	}
+	
+	public void colorize() {
 		
-		//this.setDisable(true);
+		
+		
+		switch(nbMineAround) {
+			case 1 : {setStyle("-fx-font-family: \"impact\"; -fx-font-size: 16px; -fx-text-fill: blue;"); break;}
+			case 2 : {setStyle("-fx-font-family: \"impact\"; -fx-font-size: 16px; -fx-text-fill: green;"); break;}
+			case 3 : {setStyle("-fx-font-family: \"impact\"; -fx-font-size: 16px; -fx-text-fill: red;"); break;}
+			case 4 : {setStyle("-fx-font-family: \"impact\"; -fx-font-size: 16px; -fx-text-fill: mediumpurple;"); break;}
+			case 5 : {setStyle("-fx-font-family: \"impact\"; -fx-font-size: 16px; -fx-text-fill: navy;"); break;}
+			case 6 : {setStyle("-fx-font-family: \"impact\"; -fx-font-size: 16px; -fx-text-fill: black;"); break;}
+			case 7 : {setStyle("-fx-font-family: \"impact\"; -fx-font-size: 16px; -fx-text-fill: black;"); break;}
+			case 8 : {setStyle("-fx-font-family: \"impact\"; -fx-font-size: 16px; -fx-text-fill: black;"); break;}
+			default : {break;}
+		}
+		
+		
 	}
 	
 	
@@ -45,6 +78,10 @@ public class Cel extends Button {
 		this.nbMineAround = nbMineAround;
 	}
 
+	public void incrMineAround() {
+		this.nbMineAround ++;
+	}
+	
 	public boolean isMine() {
 		return isMine;
 	}
@@ -60,10 +97,15 @@ public class Cel extends Button {
 	public void setRevealed(boolean isRevealed) {
 		this.isRevealed = isRevealed;
 	}
-	
-	
-	
-	
-	
+
+
+	public boolean isFlagged() {
+		return isFlagged;
+	}
+
+
+	public void setFlagged(boolean isFlagged) {
+		this.isFlagged = isFlagged;
+	}
 	
 }

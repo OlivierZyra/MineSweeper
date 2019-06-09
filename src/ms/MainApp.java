@@ -1,15 +1,12 @@
 package ms;
 
 import java.io.IOException;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import ms.view.MainViewController;
-
-
 
 public class MainApp extends Application {
 
@@ -41,16 +38,16 @@ public class MainApp extends Application {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(MainApp.class.getResource("view/MainView.fxml"));
 			mainView = (BorderPane) loader.load();
+			
+			// Gives stage reference to the controller (required for resizing the window when the game mode is changed) 
 			MainViewController controller = (MainViewController) loader.getController();
 			controller.setStageReference(primaryStage);
-			
-			
+					
 			// Show the scene 
 			scene = new Scene(mainView);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 			
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
