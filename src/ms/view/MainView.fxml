@@ -21,7 +21,7 @@
                         <MenuItem fx:id="newHardButton" mnemonicParsing="false" onAction="#onNewGameHardPressed" text="Hard" />
                     </items>
                   </Menu>
-              <MenuItem fx:id="quitButton" mnemonicParsing="false" text="Quit" />
+              <MenuItem fx:id="quitButton" mnemonicParsing="false" onAction="#onQuitPressed" text="Quit" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">

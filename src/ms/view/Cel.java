@@ -28,7 +28,7 @@ public class Cel extends Button {
 		this.setMinSize(size, size);
 		this.setPrefSize(size, size);
 		this.setText(" ");
-		
+		this.setStyle("-fx-border-style: solid; -fx-border-width: 2; -fx-border-radius: 2;");
 		//this.setOnMouseClicked(e -> this.controller.revealCel(this));	
 		this.setOnMouseClicked(e -> {
 			if(e.getButton().equals(MouseButton.PRIMARY)) {
@@ -42,11 +42,10 @@ public class Cel extends Button {
 		});
 	}
 	
-	public void colorize() {
-		
-		
+	public void colorize() {	
 		
 		switch(nbMineAround) {
+			case 0 : {setStyle(""); break;}
 			case 1 : {setStyle("-fx-font-family: \"impact\"; -fx-font-size: 16px; -fx-text-fill: blue;"); break;}
 			case 2 : {setStyle("-fx-font-family: \"impact\"; -fx-font-size: 16px; -fx-text-fill: green;"); break;}
 			case 3 : {setStyle("-fx-font-family: \"impact\"; -fx-font-size: 16px; -fx-text-fill: red;"); break;}

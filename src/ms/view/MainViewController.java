@@ -74,7 +74,9 @@ public class MainViewController implements Initializable {
 	public void onNewGamePressed() {
 		initGameGrid(mode);
 	}	
-
+	public void onQuitPressed() {
+		stageReference.close();
+	}
 	// GAME LOGIC METHODS ///////////////////////////////////////////////////////////////////////
 	// GAME LOGIC METHODS ///////////////////////////////////////////////////////////////////////
 
@@ -194,8 +196,7 @@ public class MainViewController implements Initializable {
 
 						if(cel.getNbMineAround() > 0) {
 
-							cel.setText(""+cel.getNbMineAround());
-							cel.colorize();
+							cel.setText(""+cel.getNbMineAround());	
 
 						} else {
 
@@ -209,7 +210,9 @@ public class MainViewController implements Initializable {
 							if(xx < mode.getW()-1 && yy < mode.getH()-1 ) {revealCel(cels[xx+1][yy+1]);}
 
 						}
-
+						
+						cel.colorize();
+						
 					}
 
 					if(isWin()) {
@@ -227,28 +230,32 @@ public class MainViewController implements Initializable {
 
 
 	public void placeFlag(Cel cel) {
+		
+		if(!gameOver) {
+			
+			if(!cel.isRevealed()) {
 
-		if(!cel.isRevealed()) {
+				if(cel.isFlagged()) {
 
-			if(cel.isFlagged()) {
+					cel.setText("");
+					cel.setFlagged(false);
+					nbFlag ++;
 
-				cel.setText("");
-				cel.setFlagged(false);
-				nbFlag ++;
+				} else {
 
-			} else {
+					if(nbFlag > 0) {
 
-				if(nbFlag > 0) {
+						cel.setText("F");
+						cel.setFlagged(true);
+						nbFlag --;
 
-					cel.setText("F");
-					cel.setFlagged(true);
-					nbFlag --;
+					}
 
 				}
 
+				updateMineLabel();
+
 			}
-			
-			updateMineLabel();
 
 		}
 
@@ -281,6 +288,7 @@ public class MainViewController implements Initializable {
 		if(nbFlag < 10)  {mineLabel.setText("00"+nbFlag);} else
 		if(nbFlag < 100) {mineLabel.setText("0"+nbFlag);}
 	}
+	
 	// TIMER METHODS ///////////////////////////////////////////////////////////////////////////
 	public void initTimer() {
 		
