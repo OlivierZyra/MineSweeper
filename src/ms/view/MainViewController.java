@@ -53,6 +53,7 @@ public class MainViewController implements Initializable {
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		initTimer();
 		initGameGrid(EMode.EASY);
 	}
 
@@ -82,10 +83,15 @@ public class MainViewController implements Initializable {
 		nbFlag = mode.getNbMine();
 		initialClick = true;
 		gameOver = false;
+		
+		// restart the mine label if needed
+		updateMineLabel();
 
-		// start the timer 
-		timer = initTimer();
-
+		// restart the timer if needed
+		time = 0;
+		timerLabel.setText("000");
+		timer.stop();
+		
 		// Assign difficulty mode
 		this.mode = mode;
 
@@ -166,6 +172,7 @@ public class MainViewController implements Initializable {
 
 			if(initialClick) {
 				placeMines(xx, yy);
+				timer.play();
 				initialClick = false;
 			}
 
@@ -240,6 +247,8 @@ public class MainViewController implements Initializable {
 				}
 
 			}
+			
+			updateMineLabel();
 
 		}
 
@@ -267,22 +276,23 @@ public class MainViewController implements Initializable {
 
 	}
 
+	public void updateMineLabel() {
+		if(nbFlag == 0)  {mineLabel.setText("000");} else
+		if(nbFlag < 10)  {mineLabel.setText("00"+nbFlag);} else
+		if(nbFlag < 100) {mineLabel.setText("0"+nbFlag);}
+	}
 	// TIMER METHODS ///////////////////////////////////////////////////////////////////////////
-	public Timeline initTimer() {
-
-		if(timer != null) {timer.stop();}	
-		time = 0;
-		timerLabel.setText("000");
-
-		Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), ev -> {
-			timerTick();
-	    }));
+	public void initTimer() {
 		
-	    timeline.setCycleCount(Timeline.INDEFINITE);
-	    timeline.play();
-	  
-		return timeline;
-
+		if(timer != null) {
+			timer.playFromStart();
+		} else {
+			timer = new Timeline(new KeyFrame(Duration.seconds(1), ev -> {
+				timerTick();
+		    }));
+			timer.setCycleCount(Timeline.INDEFINITE);
+		}
+		
 	}
 
 	public void timerTick() {
@@ -292,7 +302,8 @@ public class MainViewController implements Initializable {
 			timer.stop();
 		} else {
 			if(time < 10)  {timerLabel.setText("00"+time);} else
-				if(time < 100) {timerLabel.setText("0"+time);}
+			if(time < 100) {timerLabel.setText("0"+time);} else 
+			{timerLabel.setText(""+time);}
 		}
 	}
 

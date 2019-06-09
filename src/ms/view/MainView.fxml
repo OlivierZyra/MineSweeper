@@ -48,7 +48,7 @@
                   </Button>
                </center>
                <left>
-                  <Label fx:id="mineLabel" contentDisplay="CENTER" style="-fx-background-color: black; -fx-border-style: solid outside; -fx-border-color: white;" text="099" textAlignment="CENTER" textFill="RED" BorderPane.alignment="CENTER">
+                  <Label fx:id="mineLabel" contentDisplay="CENTER" style="-fx-background-color: black; -fx-border-style: solid outside; -fx-border-color: white;" text="000" textAlignment="CENTER" textFill="RED" BorderPane.alignment="CENTER">
                      <BorderPane.margin>
                         <Insets left="8.0" />
                      </BorderPane.margin>
@@ -61,7 +61,7 @@
                   </Label>
                </left>
                <right>
-                  <Label fx:id="timerLabel" contentDisplay="CENTER" style="-fx-background-color: black; -fx-border-style: solid outside; -fx-border-color: white;" text="999" textAlignment="CENTER" textFill="RED" BorderPane.alignment="CENTER">
+                  <Label fx:id="timerLabel" contentDisplay="CENTER" style="-fx-background-color: black; -fx-border-style: solid outside; -fx-border-color: white;" text="000" textAlignment="CENTER" textFill="RED" BorderPane.alignment="CENTER">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
