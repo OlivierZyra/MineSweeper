@@ -7,6 +7,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import ms.view.MainViewController;
+
+
 
 public class MainApp extends Application {
 
@@ -16,14 +19,12 @@ public class MainApp extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-
-
+		
 		this.primaryStage = primaryStage;
-		this.primaryStage.setTitle("AddressApp");
-
+		this.primaryStage.setTitle("MineSweeper");
+		this.primaryStage.setResizable(false);
+		
 		initView();
-
-
 
 	}
 
@@ -33,21 +34,30 @@ public class MainApp extends Application {
 
 
 	public void initView() {
+		
 		try {
-			
+
 			// Load scene from fxml file.
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(MainApp.class.getResource("view/MainView.fxml"));
 			mainView = (BorderPane) loader.load();
-
+			MainViewController controller = (MainViewController) loader.getController();
+			controller.setStageReference(primaryStage);
+			
+			
 			// Show the scene 
 			scene = new Scene(mainView);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+
+	
+
+
 
 }

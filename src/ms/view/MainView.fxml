@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ms.view.MainViewController">
+<BorderPane fx:id="rootNode" prefHeight="205.0" prefWidth="182.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ms.view.MainViewController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -16,9 +16,9 @@
             <items>
                   <Menu mnemonicParsing="false" text="New...">
                     <items>
-                      <MenuItem fx:id="newEasyButton" mnemonicParsing="false" text="Easy" />
-                        <MenuItem fx:id="newNormButton" mnemonicParsing="false" text="Normal" />
-                        <MenuItem fx:id="newHardButton" mnemonicParsing="false" text="Hard" />
+                      <MenuItem fx:id="newEasyButton" mnemonicParsing="false" onAction="#onNewGameEasyPressed" text="Easy" />
+                        <MenuItem fx:id="newNormButton" mnemonicParsing="false" onAction="#onNewGameNormPressed" text="Normal" />
+                        <MenuItem fx:id="newHardButton" mnemonicParsing="false" onAction="#onNewGameHardPressed" text="Hard" />
                     </items>
                   </Menu>
               <MenuItem fx:id="quitButton" mnemonicParsing="false" text="Quit" />
@@ -41,7 +41,7 @@
                      <graphic>
                         <ImageView fitHeight="31.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" smooth="false">
                            <image>
-                              <Image url="@../../../../../Desktop/Image1.png" />
+                              <Image url="@images/Smiley.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -76,20 +76,11 @@
             </BorderPane>
          </top>
          <center>
-            <GridPane fx:id="gameGrid" gridLinesVisible="true" prefHeight="151.0" prefWidth="158.0" BorderPane.alignment="CENTER">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
+            <BorderPane fx:id="gameGridContainer" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                </BorderPane.margin>
-            </GridPane>
+            </BorderPane>
          </center>
       </BorderPane>
    </center>
