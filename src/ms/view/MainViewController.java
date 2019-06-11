@@ -57,7 +57,6 @@ public class MainViewController implements Initializable {
 		initGameGrid(EMode.EASY);
 	}
 
-	// INPUTS METHODS ///////////////////////////////////////////////////////////////////////////
 	// INPUT EVENT METHODS //////////////////////////////////////////////////////////////////////
 	public void onNewGameEasyPressed() {
 		initGameGrid(EMode.EASY);
@@ -77,9 +76,8 @@ public class MainViewController implements Initializable {
 	public void onQuitPressed() {
 		stageReference.close();
 	}
+	
 	// GAME LOGIC METHODS ///////////////////////////////////////////////////////////////////////
-	// GAME LOGIC METHODS ///////////////////////////////////////////////////////////////////////
-
 	public void initGameGrid(EMode mode) {
 
 		nbFlag = mode.getNbMine();
@@ -132,7 +130,6 @@ public class MainViewController implements Initializable {
 
 	}
 
-
 	public void placeMines(int notHereX, int notHereY) {
 
 		int nbMine = mode.getNbMine();
@@ -163,7 +160,6 @@ public class MainViewController implements Initializable {
 		}
 
 	}
-
 
 	public void revealCel(Cel cel) {
 
@@ -228,10 +224,9 @@ public class MainViewController implements Initializable {
 
 	}
 
-
 	public void placeFlag(Cel cel) {
 		
-		if(!gameOver) {
+		if(!gameOver && !initialClick) {
 			
 			if(!cel.isRevealed()) {
 
@@ -260,7 +255,6 @@ public class MainViewController implements Initializable {
 		}
 
 	}
-
 
 	public boolean isWin() {
 
