@@ -28,7 +28,7 @@ public class Cel extends Button {
 		this.setMinSize(size, size);
 		this.setPrefSize(size, size);
 		this.setText(" ");
-		this.setStyle("-fx-border-style: solid; -fx-border-width: 2; -fx-border-radius: 2;");
+		this.setStyle("-fx-border-style: solid; -fx-border-width: 2;");
 		//this.setOnMouseClicked(e -> this.controller.revealCel(this));	
 		this.setOnMouseClicked(e -> {
 			if(e.getButton().equals(MouseButton.PRIMARY)) {

@@ -2,9 +2,9 @@ package enums;
 
 public enum EMode {
 	
-	EASY(8,8,10),
-	NORMAL(16,16,40),
-	HARD(30,16,99);
+	EASY(8,8,10),     // 8,8,10
+	NORMAL(16,16,40), // 16,16,40
+	HARD(30,16,99);   // 30,16,99
 	
 	private int w;
 	private int h;

@@ -1,6 +1,12 @@
 package ms;
 
 import java.io.IOException;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
+import enums.EMode;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -16,6 +22,13 @@ public class MainApp extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
+		
+		try {
+			ScoreManager.getScore(EMode.EASY);
+		} catch (ParserConfigurationException | SAXException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		this.primaryStage = primaryStage;
 		this.primaryStage.setTitle("MineSweeper");

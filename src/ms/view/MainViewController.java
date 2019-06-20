@@ -1,8 +1,15 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////
 package ms.view;
+import java.io.IOException;
 /////////////////////////////////////////////////////////////////////////////////////////////////
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+
+import org.xml.sax.SAXException;
+
 import enums.EMode;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -18,6 +25,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import ms.ScoreManager;
+import ms.ScoreRecord;
 /////////////////////////////////////////////////////////////////////////////////////////////////
 public class MainViewController implements Initializable {
 	/////////////////////////////////////////////////////////////////////////////////////////////
@@ -211,9 +220,17 @@ public class MainViewController implements Initializable {
 						
 					}
 
-					if(isWin()) {
+					if(isWin() && !gameOver) {					
 						gameOver = true;
 						timer.stop();
+						try {
+							if(ScoreManager.isRecord(mode, time)) {
+								ScoreManager.writeScore(mode, new ScoreRecord("olivier",time));
+							}
+						} catch (ParserConfigurationException | SAXException | IOException | TransformerException e) {
+							e.printStackTrace();
+						}
+						
 					}
 
 				}
